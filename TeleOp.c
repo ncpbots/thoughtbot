@@ -114,7 +114,7 @@ task main()
 		  motor[rearRight] = 	-abs(joystick.joy1_x2); //counterclockwise
 		}
 
-		if (abs(joystick.joy1_x1)<10 && abs(joystick.joy1_y1)<10 && abs(joystick.joy1_x2)<10) stopMotors();
+		if (abs(joystick.joy1_x1)<10 && abs(joystick.joy1_y1)<10 && abs(joystick.joy1_x2)<10) StartTask(stopMotor); //stop all motors if no joystick input
 
 
 	  //--------------LIFT CONTROL----------------//
