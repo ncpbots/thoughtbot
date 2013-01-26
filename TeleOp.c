@@ -2,8 +2,8 @@
 #pragma config(Sensor, S1,     ,               sensorI2CMuxController)
 #pragma config(Motor,  mtr_S1_C1_1,     rearRight,     tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C1_2,     frontRight,    tmotorTetrix, openLoop)
-#pragma config(Motor,  mtr_S1_C2_1,     light,         tmotorTetrix, openLoop)
-#pragma config(Motor,  mtr_S1_C2_2,     lift,          tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C2_1,     lift1,         tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C2_2,     lift2,         tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C3_1,     frontLeft,     tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C3_2,     rearLeft,      tmotorTetrix, openLoop)
 #pragma config(Servo,  srvo_S1_C4_1,    claw,                 tServoStandard)
@@ -24,6 +24,10 @@ main robot movement:
 		- down -> backward
 		- left -> strafe left
 		- right -> strafe right
+		- left-up -> strafe northwest
+		- right-up -> strafe northeast
+		- left-down -> strafe southwest
+		- right-down -> strafe southeast
 	right stick:
 		- left -> turn left
 		- right -> turn right
@@ -38,11 +42,15 @@ lights: 2 to turn on, 4 to turn off
 
 */
 
-task stopMotors() {
+void stopMotors() {
 	motor[frontLeft] = 0; //off
 	motor[frontRight]= 0; //off
 	motor[rearLeft]  = 0; //off
 	motor[rearRight] = 0; //off
+}
+
+int joyDistance() {
+	return sqrt(joystick.joy1_x1^2+joystick.joy1_y1^2);
 }
 
 task main()
@@ -77,7 +85,7 @@ task main()
 		}
 
 	  //***STRAFE LEFT***//
-		if (joystick.joy1_x1>10 && abs(joystick.joy1_x1)<10 && abs(joystick.joy1_x2)<10)
+		if (joystick.joy1_x1>10 && abs(joystick.joy1_y1)<10 && abs(joystick.joy1_x2)<10)
 		{
 		  motor[frontLeft] =  abs(joystick.joy1_x1); //counterclockwise
 		  motor[frontRight] = abs(joystick.joy1_x1); //clockwise
@@ -86,7 +94,7 @@ task main()
 		}
 
 	  //***STRAFE RIGHT***//
-	  if (joystick.joy1_x1<-10 && abs(joystick.joy1_x1)<10 && abs(joystick.joy1_x2)<10)
+	  if (joystick.joy1_x1<-10 && abs(joystick.joy1_y1)<10 && abs(joystick.joy1_x2)<10)
 		{
 		  motor[frontLeft] = 	-abs(joystick.joy1_x1); //counterclockwise
 		  motor[frontRight] = -abs(joystick.joy1_x1); //clockwise
@@ -94,7 +102,46 @@ task main()
 		  motor[rearRight] = 	 abs(joystick.joy1_x1); //clockwise
 		}
 
-		//====LEFT JOYSTICK====//
+		//***STRAFE NORTHWEST***//
+		if (joystick.joy1_x1<-10 && joystick.joy1_y1>10 && abs(joystick.joy1_x2)<10)
+		{
+			motor[frontLeft] = 0;
+		  motor[frontRight] = joyDistance(); //clockwise, distance from center
+		  motor[rearLeft] = joyDistance(); //counterclockwise, distance from center
+		  motor[rearRight] = 0;
+		}
+
+		//***STRAFE NORTHEAST***//
+		if (joystick.joy1_x1>10 && joystick.joy1_y1>10 && abs(joystick.joy1_x2)<10)
+		{
+			motor[frontLeft] = joyDistance(); //clockwise, distance from center
+		  motor[frontRight] = 0;
+		  motor[rearLeft] = 0;
+		  motor[rearRight] = joyDistance(); //counterclockwise, distance from center
+		}
+
+		//***STRAFE SOUTHWEST***//
+		if (joystick.joy1_x1<-10 && joystick.joy1_y1<-10 && abs(joystick.joy1_x2)<10)
+		{
+			motor[frontLeft] = joyDistance(); //clockwise, distance from center
+		  motor[frontRight] = 0;
+		  motor[rearLeft] = 0;
+		  motor[rearRight] = joyDistance(); //counterclockwise, distance from center
+		}
+
+		//***STRAFE SOUTHEAST***//
+		if (joystick.joy1_x1>10 && joystick.joy1_y1<-10 && abs(joystick.joy1_x2)<10)
+		{
+			motor[frontLeft] = 0;
+		  motor[frontRight] = joyDistance(); //clockwise, distance from center
+		  motor[rearLeft] = joyDistance(); //counterclockwise, distance from center
+		  motor[rearRight] = 0;
+		}
+
+		//====END LEFT JOYSTICK====//
+
+
+		//====RIGHT JOYSTICK====//
 
 		//***TURN LEFT***//
 		if (joystick.joy1_x2>10 && abs(joystick.joy1_x1)<10 && abs(joystick.joy1_y1)<10)
@@ -114,21 +161,42 @@ task main()
 		  motor[rearRight] = 	-abs(joystick.joy1_x2); //counterclockwise
 		}
 
-		if (abs(joystick.joy1_x1)<10 && abs(joystick.joy1_y1)<10 && abs(joystick.joy1_x2)<10) StartTask(stopMotor); //stop all motors if no joystick input
+		//====END RIGHT JOYSTICK====//
+
+		//stop all motors if no joystick input
+		if (abs(joystick.joy1_x1)<10 && abs(joystick.joy1_y1)<10 && abs(joystick.joy1_x2)<10) stopMotors();
+
+		//-----------END MAIN ROBOT CONTROL---------//
+
 
 
 	  //--------------LIFT CONTROL----------------//
-	  if (joystick.joy1_TopHat == 0) motor[lift] = 40; //move up with D-pad up
-	  else if (joystick.joy1_TopHat == 4) motor[lift] = -40; //move down with D-pad down
-	  else if (joystick.joy1_TopHat != 0 && joystick.joy1_TopHat != 4) motor[lift] = 0;
+	  if (joystick.joy1_TopHat == 0) //move up with D-pad up
+	  {
+	  	motor[lift1] = -50;
+	  	motor[lift2] = -50;
+	  }
+	  else if (joystick.joy1_TopHat == 4) //move down with D-pad down
+	  {
+	  	motor[lift1] = 50;
+	  	motor[lift2] = 50;
+	  }
+	  else if (joystick.joy1_TopHat != 0 && joystick.joy1_TopHat != 4) //stop lift
+	  {
+	  	motor[lift1] = 0;
+	  	motor[lift2] = 0;
+	  }
+		//-------------END LIFT CONTROL-------------//
 
 	  //--------------CLAW CONTROL----------------//
 	  if (joy1Btn(5)==1) servo[claw] = 140; //open on pressing 5
 	  else if (joy1Btn(6)==1) servo[claw] = 220; //close on pressing 6
+	  //------------END CLAW CONTROL--------------//
 
 		//--------------LIGHTS ON/OFF---------------//
-	  if (joy1Btn(2)==1) motor[light] = 50; //press 2 to turn on lights
-	 	if (joy1Btn(4)==1) motor[light] = 0; //press 4 to turn off lights
+	  //if (joy1Btn(2)==1) motor[light] = 50; //press 2 to turn on lights
+	 	//if (joy1Btn(4)==1) motor[light] = 0; //press 4 to turn off lights
+	  //------------END LIGHTS ON/OFF-------------//
 
   }
 }
