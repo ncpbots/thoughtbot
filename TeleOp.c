@@ -38,6 +38,13 @@ lights: 2 to turn on, 4 to turn off
 
 */
 
+task stopMotors() {
+	motor[frontLeft] = 0; //off
+	motor[frontRight]= 0; //off
+	motor[rearLeft]  = 0; //off
+	motor[rearRight] = 0; //off
+}
+
 task main()
 {
 
@@ -107,11 +114,13 @@ task main()
 		  motor[rearRight] = 	-abs(joystick.joy1_x2); //counterclockwise
 		}
 
+		if (abs(joystick.joy1_x1)<10 && abs(joystick.joy1_y1)<10 && abs(joystick.joy1_x2)<10) stopMotors();
 
 
 	  //--------------LIFT CONTROL----------------//
 	  if (joystick.joy1_TopHat == 0) motor[lift] = 40; //move up with D-pad up
 	  else if (joystick.joy1_TopHat == 4) motor[lift] = -40; //move down with D-pad down
+	  else if (joystick.joy1_TopHat != 0 && joystick.joy1_TopHat != 4) motor[lift] = 0;
 
 	  //--------------CLAW CONTROL----------------//
 	  if (joy1Btn(5)==1) servo[claw] = 140; //open on pressing 5
