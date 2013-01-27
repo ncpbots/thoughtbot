@@ -83,7 +83,7 @@ void moveWheels(int fl, int fr, int rl, int rr)
  */
 void moveWheels(int joyValue)
 {
-   motor[frontLeft]  = joyValue;
+  motor[frontLeft]  = joyValue;
 	motor[frontRight] = joyValue;
 	motor[rearLeft]   = joyValue;
 	motor[rearRight]  = joyValue;
