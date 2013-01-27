@@ -54,9 +54,9 @@
 
 //------------------------------------------ ULTILITY METHODS --------------------------------------------//
 
-int xClock()  {return abs(joystick.joy1_x1);}		//Left joystick x-axis value; clockwise
+int xClock()  {return abs(joystick.joy1_x1);}	//Left joystick x-axis value; clockwise
 int xAClock() {return -abs(joystick.joy1_x1);}	//Left joystick x-axis value; anti-clockwise
-int yClock()  {return abs(joystick.joy1_y1);}		//Left joystick y-axis value; clockwise
+int yClock()  {return abs(joystick.joy1_y1);}	//Left joystick y-axis value; clockwise
 int yAClock() {return -abs(joystick.joy1_y1);}	//Left joystick y-axis value; anti-clockwise
 
 /* Averages the left joystick x and y axis values. */
@@ -71,10 +71,10 @@ int joyAvg()	{return (joystick.joy1_x1 + joystick.joy1_y1) / 2;}
  */
 void moveWheels(int fl, int fr, int rl, int rr)
 {
-	motor[frontLeft]  = fl;
-	motor[frontRight] = fr;
-	motor[rearLeft]   = rl;
-	motor[rearRight]  = rr;
+   motor[frontLeft]  = fl;
+   motor[frontRight] = fr;
+   motor[rearLeft]   = rl;
+   motor[rearRight]  = rr;
 }
 
 /* Moves all wheel motors.
@@ -83,10 +83,10 @@ void moveWheels(int fl, int fr, int rl, int rr)
  */
 void moveWheels(int joyValue)
 {
-  motor[frontLeft]  = joyValue;
-	motor[frontRight] = joyValue;
-	motor[rearLeft]   = joyValue;
-	motor[rearRight]  = joyValue;
+   motor[frontLeft]  = joyValue;
+   motor[frontRight] = joyValue;
+   motor[rearLeft]   = joyValue;
+   motor[rearRight]  = joyValue;
 }
 
 /* Moves lift motors.
