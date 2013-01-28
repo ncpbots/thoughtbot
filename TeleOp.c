@@ -36,7 +36,7 @@
 |*            - Right+Up -------> Strafe Forward-Right                                                    *|
 |*            - Left+Down ------> Strafe Back-Left                                                        *|
 |*            - Right+Down -----> Strafe Back-Right                                                       *|
-|*         Right Stick:                                                                                   *|
+|*         Right Joystick:                                                                                *|
 |*            - Left -----------> Rotate Left/Anti-Clockwise                                              *|
 |*            - Right ----------> Rotate Right/Clockwise                                                  *|
 |*                                                                                                        *|
@@ -54,50 +54,43 @@
 
 //------------------------------------------ ULTILITY METHODS --------------------------------------------//
 
-int xClock()  {return abs(joystick.joy1_x1);}	//Left joystick x-axis value; clockwise
-int xAClock() {return -abs(joystick.joy1_x1);}	//Left joystick x-axis value; anti-clockwise
-int yClock()  {return abs(joystick.joy1_y1);}	//Left joystick y-axis value; clockwise
-int yAClock() {return -abs(joystick.joy1_y1);}	//Left joystick y-axis value; anti-clockwise
-
-/* Averages the left joystick x and y axis values. */
-int joyAvg()	{return (joystick.joy1_x1 + joystick.joy1_y1) / 2;}
+bool noLeftX() {return abs(joystick.joy1_x1) < 10;}   // True if left stick x value is below threshold
+bool noLeftY() {return abs(joystick.joy1_y1) < 10;}   // True if left stick y value is below threshold
+bool noRightX(){return abs(joystick.joy1_x1) < 10;}   // True if right stick x value is below threshold
+float joyToMotor = 100/127;                           // Conversion ratio for joystick values
+int xClock()   {return abs(joystick.joy1_x1);}	      // Left stick x value; clockwise
+int xAClock()  {return -abs(joystick.joy1_x1);}	      // Left stick x value; anti-clockwise
+int yClock()   {return abs(joystick.joy1_y1);}	      // Left stick y value; clockwise
+int yAClock()  {return -abs(joystick.joy1_y1);}	      // Left stick y value; anti-clockwise
+int joyAvg()   {return (joystick.joy1_x1 + joystick.joy1_y1) / 2;}   // Averages x and y joystick values
 
 /* Moves wheel motors.
  * @param:
- * 	- fl: input for frontLeft motor
- * 	- fr: input for frontRight motor
- * 	- rl: input for rearLeft motor
- * 	- rr: input for rearRight motor
+ * 	- fl: Joystick value for frontLeft motor
+ * 	- fr: Joystick value for frontRight motor
+ * 	- rl: Joystick value for rearLeft motor
+ * 	- rr: Joystick value for rearRight motor
  */
-void moveWheels(int fl, int fr, int rl, int rr)
+void move(int fl, int fr, int rl, int rr)
 {
-   motor[frontLeft]  = fl;
-   motor[frontRight] = fr;
-   motor[rearLeft]   = rl;
-   motor[rearRight]  = rr;
+   motor[frontLeft]  = fl * joyToMotor;
+   motor[frontRight] = fr * joyToMotor;
+   motor[rearLeft]   = rl * joyToMotor;
+   motor[rearRight]  = rr * joyToMotor;
 }
 
 /* Moves all wheel motors.
- * @param:
- * 	- joyValue: input for frontLeft motor
+ * @param joyValue: Joystick value for all motors
  */
-void moveWheels(int joyValue)
+void move(int joyValue)
 {
-   motor[frontLeft]  = joyValue;
-   motor[frontRight] = joyValue;
-   motor[rearLeft]   = joyValue;
-   motor[rearRight]  = joyValue;
+   motor[frontLeft] = motor[frontRight] = motor[rearLeft] = motor[rearRight] = joyValue * joyToMotor;
 }
 
 /* Moves lift motors.
- * @param:
- * 	- power: power allocated to lift motors
+ * @param power: Power input to lift motors
  */
-void moveLift(int power)
-{
-   motor[lift1] = power;
-   motor[lift2] = power;
-}
+void lift(int power)   {motor[lift1] = motor[lift2] = power;}
 //------------------------------------------ END ULTILITY METHODS ----------------------------------------//
 
 
@@ -116,61 +109,60 @@ task main()
       //=============== LEFT JOYSTICK ===============//
 
       //*** FORWARD ***//
-      if (joystick.joy1_y1 > 10 && abs(joystick.joy1_x1) < 10 && abs(joystick.joy1_x2) < 10)
-         moveWheels(yAClock(), yClock(),  yAClock(), yClock());
+      if (joystick.joy1_y1 > 10 && noLeftX() && noRightX())
+         move(yAClock(), yClock(),  yAClock(), yClock());
 
       //*** REVERSE ***//
-      if (joystick.joy1_y1 < -10 && abs(joystick.joy1_x1) < 10 && abs(joystick.joy1_x2) < 10)
-         moveWheels(yClock(), yAClock(),  yClock(), yAClock());
+      if (joystick.joy1_y1 < -10 && noLeftX() < 10 && noRightX())
+         move(yClock(), yAClock(),  yClock(), yAClock());
 
       //*** STRAFE LEFT ***//
-      if (joystick.joy1_x1 > 10 && abs(joystick.joy1_y1) < 10 && abs(joystick.joy1_x2) < 10)
-         moveWheels(yClock(), yClock(),  yAClock(), yAClock());
+      if (joystick.joy1_x1 > 10 && noLeftY() && noRightX())
+         move(yClock(), yClock(),  yAClock(), yAClock());
 
       //*** STRAFE RIGHT ***//
-      if (joystick.joy1_x1 < -10 && abs(joystick.joy1_y1) < 10 && abs(joystick.joy1_x2) < 10)
-         moveWheels(yAClock(), yAClock(),  yClock(), yClock());
+      if (joystick.joy1_x1 < -10 && noLeftY() && noRightX())
+         move(yAClock(), yAClock(),  yClock(), yClock());
 
       //*** STRAFE UP-LEFT ***//
-      if (joystick.joy1_x1 < -10 && joystick.joy1_y1 > 10 && abs(joystick.joy1_x2) < 10)
-         moveWheels(0, joyAvg(), -joyAvg(), 0);
+      if (joystick.joy1_x1 < -10 && joystick.joy1_y1 > 10 && noRightX())
+         move(0, joyAvg(), -joyAvg(), 0);
 
       //*** STRAFE UP-RIGHT ***//
-      if (joystick.joy1_x1 > 10 && joystick.joy1_y1 >10 && abs(joystick.joy1_x2) < 10)
-         moveWheels(-joyAvg(), 0, 0, joyAvg());
+      if (joystick.joy1_x1 > 10 && joystick.joy1_y1 >10 && noRightX())
+         move(-joyAvg(), 0, 0, joyAvg());
 
       //*** STRAFE BACK-LEFT ***//
-      if (joystick.joy1_x1 < -10 && joystick.joy1_y1 < -10 && abs(joystick.joy1_x2) < 10)
-         moveWheels(joyAvg(), 0, 0, -joyAvg());
+      if (joystick.joy1_x1 < -10 && joystick.joy1_y1 < -10 && noRightX())
+         move(joyAvg(), 0, 0, -joyAvg());
 
       //*** STRAFE BACK-RIGHT ***//
-      if (joystick.joy1_x1 > 10 && joystick.joy1_y1 < -10 && abs(joystick.joy1_x2) < 10)
-         moveWheels(0, -joyAvg(), joyAvg(), 0);
+      if (joystick.joy1_x1 > 10 && joystick.joy1_y1 < -10 && noRightX())
+         move(0, -joyAvg(), joyAvg(), 0);
       //============= END LEFT JOYSTICK =============//
 
       //============== RIGHT JOYSTICK ===============//
 
       //*** TURN LEFT ***//
-      if (joystick.joy1_x2 > 10 && abs(joystick.joy1_x1) < 10 && abs(joystick.joy1_y1) < 10)
-         moveWheels(abs(joystick.joy1_x2));
+      if (joystick.joy1_x2 > 10 && noLeftX() && noLeftY())
+         move(abs(joystick.joy1_x2));
 
       //*** TURN RIGHT ***//
-      if (joystick.joy1_x2 < -10 && abs(joystick.joy1_x1)<10 && abs(joystick.joy1_y1) < 10)
-         moveWheels(-abs(joystick.joy1_x2));
+      if (joystick.joy1_x2 < -10 && noLeftX() && noLeftY())
+         move(-abs(joystick.joy1_x2));
       //============ END RIGHT JOYSTICK ==============//
 
       // Stop all wheels if no joystick input
-      if (abs(joystick.joy1_x1) < 10 && abs(joystick.joy1_y1) < 10 && abs(joystick.joy1_x2) < 10)
-         moveWheels(0);
+      if (noLeftX() && noLeftY() && noRightX()) move(0);
       //--------------------------- END MAIN ROBOT CONTROL -------------------------//
 
 
       //------------------------------- LIFT CONTROL -------------------------------//
 
-      if (joystick.joy1_TopHat == 0) moveLift(-50);                     // Lift up
-      else if (joystick.joy1_TopHat == 4) moveLift(50);                 // Lift Down
+      if (joystick.joy1_TopHat == 0) lift(-50);                     // Lift up
+      else if (joystick.joy1_TopHat == 4) lift(50);                 // Lift Down
       else if (joystick.joy1_TopHat != 0 && joystick.joy1_TopHat != 4)  // Stop lift
-         moveLift(0);
+         lift(0);
       //----------------------------- END LIFT CONTROL -----------------------------//
 
 
@@ -188,3 +180,4 @@ task main()
       //---------------------------- END LIGHT CONTROL -----------------------------//
    }
 }
+//------------------------------------------ END TELE-OP PROGRAM -----------------------------------------//
