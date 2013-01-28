@@ -52,12 +52,11 @@
 |*                                                                                                        *|
 \*---------------------------------------------------------------------------------------------------5359-*/
 
+float joyToMotor = 100.0/127.0;                       // Conversion ratio for joystick values
 //------------------------------------------ ULTILITY METHODS --------------------------------------------//
-
-bool noLeftX() {return abs(joystick.joy1_x1) < 10;}   // True if left stick x value is below threshold
-bool noLeftY() {return abs(joystick.joy1_y1) < 10;}   // True if left stick y value is below threshold
-bool noRightX(){return abs(joystick.joy1_x1) < 10;}   // True if right stick x value is below threshold
-float joyToMotor = 100/127;                           // Conversion ratio for joystick values
+bool noLeftX() {return abs(joystick.joy1_x1) < 30;}   // True if left stick x value is below threshold
+bool noLeftY() {return abs(joystick.joy1_y1) < 30;}   // True if left stick y value is below threshold
+bool noRightX(){return abs(joystick.joy1_x2) < 30;}   // True if right stick x value is below threshold
 int xClock()   {return abs(joystick.joy1_x1);}	      // Left stick x value; clockwise
 int xAClock()  {return -abs(joystick.joy1_x1);}	      // Left stick x value; anti-clockwise
 int yClock()   {return abs(joystick.joy1_y1);}	      // Left stick y value; clockwise
@@ -118,27 +117,29 @@ task main()
 
       //*** STRAFE LEFT ***//
       if (joystick.joy1_x1 > 10 && noLeftY() && noRightX())
-         move(yClock(), yClock(),  yAClock(), yAClock());
+         move(xClock(), xClock(),  xAClock(), xAClock());
 
       //*** STRAFE RIGHT ***//
       if (joystick.joy1_x1 < -10 && noLeftY() && noRightX())
-         move(yAClock(), yAClock(),  yClock(), yClock());
+         move(xAClock(), xAClock(),  xClock(), xClock());
 
-      //*** STRAFE UP-LEFT ***//
-      if (joystick.joy1_x1 < -10 && joystick.joy1_y1 > 10 && noRightX())
-         move(0, joyAvg(), -joyAvg(), 0);
 
-      //*** STRAFE UP-RIGHT ***//
-      if (joystick.joy1_x1 > 10 && joystick.joy1_y1 >10 && noRightX())
-         move(-joyAvg(), 0, 0, joyAvg());
+      ////*** STRAFE UP-LEFT ***//
+      //if (joystick.joy1_x1 < -30 && joystick.joy1_y1 > 30 && noRightX())
+      //   move(0, joyAvg(), -joyAvg(), 0);
 
-      //*** STRAFE BACK-LEFT ***//
-      if (joystick.joy1_x1 < -10 && joystick.joy1_y1 < -10 && noRightX())
-         move(joyAvg(), 0, 0, -joyAvg());
+      ////*** STRAFE UP-RIGHT ***//
+      //if (joystick.joy1_x1 > 30 && joystick.joy1_y1 > 30 && noRightX())
+      //   move(-joyAvg(), 0, 0, joyAvg());
 
-      //*** STRAFE BACK-RIGHT ***//
-      if (joystick.joy1_x1 > 10 && joystick.joy1_y1 < -10 && noRightX())
-         move(0, -joyAvg(), joyAvg(), 0);
+      ////*** STRAFE BACK-LEFT ***//
+      //if (joystick.joy1_x1 < -30 && joystick.joy1_y1 < -30 && noRightX())
+      //   move(joyAvg(), 0, 0, -joyAvg());
+
+      ////*** STRAFE BACK-RIGHT ***//
+      //if (joystick.joy1_x1 > 30 && joystick.joy1_y1 < -30 && noRightX())
+      //   move(0, -joyAvg(), joyAvg(), 0);
+
       //============= END LEFT JOYSTICK =============//
 
       //============== RIGHT JOYSTICK ===============//
@@ -159,10 +160,10 @@ task main()
 
       //------------------------------- LIFT CONTROL -------------------------------//
 
-      if (joystick.joy1_TopHat == 0) lift(-50);                     // Lift up
-      else if (joystick.joy1_TopHat == 4) lift(50);                 // Lift Down
-      else if (joystick.joy1_TopHat != 0 && joystick.joy1_TopHat != 4)  // Stop lift
-         lift(0);
+      if (joystick.joy1_TopHat == 0) lift(50);                                   // Up
+      else if (joystick.joy1_TopHat == 4) lift(-50);                             // Down
+      else if (joystick.joy1_TopHat != 0 && joystick.joy1_TopHat != 4) lift(0);  // Stop
+
       //----------------------------- END LIFT CONTROL -----------------------------//
 
 
