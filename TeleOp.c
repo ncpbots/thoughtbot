@@ -52,7 +52,7 @@
 |*                                                                                                        *|
 \*---------------------------------------------------------------------------------------------------5359-*/
 
-float joyToMotor = 100.0/127.0;                       // Conversion ratio for joystick values
+float joyToMotor = 100.0/128.0;                       // Conversion ratio for joystick values
 //------------------------------------------ ULTILITY METHODS --------------------------------------------//
 bool noLeftX() {return abs(joystick.joy1_x1) < 30;}   // True if left stick x value is below threshold
 bool noLeftY() {return abs(joystick.joy1_y1) < 30;}   // True if left stick y value is below threshold
@@ -117,11 +117,11 @@ task main()
 
       //*** STRAFE LEFT ***//
       if (joystick.joy1_x1 > 10 && noLeftY() && noRightX())
-         move(xClock(), xClock(),  xAClock(), xAClock());
+         move(xAClock(), xAClock(),  xClock(), xClock());
 
       //*** STRAFE RIGHT ***//
       if (joystick.joy1_x1 < -10 && noLeftY() && noRightX())
-         move(xAClock(), xAClock(),  xClock(), xClock());
+         move(xClock(), xClock(),  xAClock(), xAClock());
 
 
       ////*** STRAFE UP-LEFT ***//
@@ -145,12 +145,12 @@ task main()
       //============== RIGHT JOYSTICK ===============//
 
       //*** TURN LEFT ***//
-      if (joystick.joy1_x2 > 10 && noLeftX() && noLeftY())
-         move(abs(joystick.joy1_x2));
+      if (joystick.joy1_x2 > 20 && noLeftX() && noLeftY())
+         move(-abs(joystick.joy1_x2));
 
       //*** TURN RIGHT ***//
-      if (joystick.joy1_x2 < -10 && noLeftX() && noLeftY())
-         move(-abs(joystick.joy1_x2));
+      if (joystick.joy1_x2 < -20 && noLeftX() && noLeftY())
+         move(abs(joystick.joy1_x2));
       //============ END RIGHT JOYSTICK ==============//
 
       // Stop all wheels if no joystick input
@@ -160,8 +160,8 @@ task main()
 
       //------------------------------- LIFT CONTROL -------------------------------//
 
-      if (joystick.joy1_TopHat == 0) lift(50);                                   // Up
-      else if (joystick.joy1_TopHat == 4) lift(-50);                             // Down
+      if (joystick.joy1_TopHat == 0) lift(60);                                   // Up
+      else if (joystick.joy1_TopHat == 4) lift(-60);                             // Down
       else if (joystick.joy1_TopHat != 0 && joystick.joy1_TopHat != 4) lift(0);  // Stop
 
       //----------------------------- END LIFT CONTROL -----------------------------//
