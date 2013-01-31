@@ -24,7 +24,7 @@
 |*                                                                                                        *|
 |*                                    - FTC Team 5359 [SolinNoids] -                                      *|
 |*                                           Tele-Op Program                                              *|
-|*                                                                                                        *|
+|*                                                                                                         *|
 |*  This program is for the holonomic drive setup for the Team 5359's 2012-13 FTC Robot.                  *|
 |*  This setup uses four omniwheels positions at 45 degree angles at the corners of the robot.            *|
 |*  ____________________________________________________________________________________________________  *|
@@ -180,16 +180,8 @@ task main()
 
       //------------------------------ LIGHT CONTROL -------------------------------//
 
-      if (joy1Btn(2)==1) //press 2 to turn on lights
-      {
-         motor[light1] = 50;
-         motor[light2] = 50;
-      }
-      if (joy1Btn(4)==1) //press 4 to turn off lights
-      {
-         motor[light1] = 0;
-         motor[light2] = 0;
-      }
+      if (joy1Btn(2)==1) motor[light1] = motor[light2] = 50; // Button 2: Lights on
+      if (joy1Btn(4)==1) motor[light1] = motor[light2] = 0; // Button 4: Lights off
       //---------------------------- END LIGHT CONTROL -----------------------------//
    }
 }
