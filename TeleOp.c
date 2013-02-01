@@ -184,8 +184,8 @@ task main()
 
       //------------------------------ LIGHT CONTROL -------------------------------//
 
-      if (joy1Btn(2)==1) motor[light1] = motor[light2] = 50; // Button 2: Lights on
-      if (joy1Btn(4)==1) motor[light1] = motor[light2] = 0; // Button 4: Lights off
+      if (joy1Btn(2)==1) motor[light1] = 50; // Button 2: Lights on
+      if (joy1Btn(4)==1) motor[light1] = 0; // Button 4: Lights off
       //---------------------------- END LIGHT CONTROL -----------------------------//
    }
 }
