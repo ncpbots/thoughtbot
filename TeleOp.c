@@ -117,17 +117,17 @@ task main()
          //move(yAClock(), yClock(),  yAClock(), yClock());
 
       //*** REVERSE ***//
-      if (joystick.joy1_y1 > 30 && noLeftX() && noRightX())
+      else if (joystick.joy1_y1 > 30 && noLeftX() && noRightX())
          move(yClock(), yClock(),  yAClock(), yAClock());
          //move(yClock(), yAClock(),  yClock(), yAClock());
 
       //*** STRAFE LEFT ***//
-      if (joystick.joy1_x1 < -30 && noLeftY() && noRightX())
+      else if (joystick.joy1_x1 < -30 && noLeftY() && noRightX())
          move(xClock(), xAClock(),  xClock(), xAClock());
          //move(xAClock(), xAClock(),  xClock(), xClock());
 
       //*** STRAFE RIGHT ***//
-      if (joystick.joy1_x1 > 30 && noLeftY() && noRightX())
+      else if (joystick.joy1_x1 > 30 && noLeftY() && noRightX())
          move(xAClock(), xClock(),  xAClock(), xClock());
          //move(xClock(), xClock(),  xAClock(), xAClock());
 
