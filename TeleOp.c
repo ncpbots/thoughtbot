@@ -117,7 +117,7 @@ task main()
          //move(yAClock(), yClock(),  yAClock(), yClock());
 
       //*** REVERSE ***//
-      if (joystick.joy1_y1 > 10 && noLeftX() < 10 && noRightX())
+      if (joystick.joy1_y1 > 10 && noLeftX() && noRightX())
          move(xClock(), xClock(),  xAClock(), xAClock());
          //move(yClock(), yAClock(),  yClock(), yAClock());
 
