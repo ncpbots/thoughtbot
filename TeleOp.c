@@ -112,22 +112,22 @@ task main()
       //=============== LEFT JOYSTICK ===============//
 
       //*** FORWARD ***//
-      if (joystick.joy1_y1 > 10 && noLeftX() && noRightX())
+      if (joystick.joy1_y1 < -10 && noLeftX() && noRightX())
          move(xAClock(), xAClock(),  xClock(), xClock());
          //move(yAClock(), yClock(),  yAClock(), yClock());
 
       //*** REVERSE ***//
-      if (joystick.joy1_y1 < -10 && noLeftX() < 10 && noRightX())
+      if (joystick.joy1_y1 > 10 && noLeftX() < 10 && noRightX())
          move(xClock(), xClock(),  xAClock(), xAClock());
          //move(yClock(), yAClock(),  yClock(), yAClock());
 
       //*** STRAFE LEFT ***//
-      if (joystick.joy1_x1 > 10 && noLeftY() && noRightX())
+      if (joystick.joy1_x1 < -10 && noLeftY() && noRightX())
          move(yClock(), yAClock(),  yClock(), yAClock());
          //move(xAClock(), xAClock(),  xClock(), xClock());
 
       //*** STRAFE RIGHT ***//
-      if (joystick.joy1_x1 < -10 && noLeftY() && noRightX())
+      if (joystick.joy1_x1 > 10 && noLeftY() && noRightX())
          move(yAClock(), yClock(),  yAClock(), yClock());
          //move(xClock(), xClock(),  xAClock(), xAClock());
 
@@ -153,11 +153,11 @@ task main()
       //============== RIGHT JOYSTICK ===============//
 
       //*** TURN LEFT ***//
-      if (joystick.joy1_x2 > 20 && noLeftX() && noLeftY())
+      if (joystick.joy1_x2 < -20 && noLeftX() && noLeftY())
          move(-abs(joystick.joy1_x2));
 
       //*** TURN RIGHT ***//
-      if (joystick.joy1_x2 < -20 && noLeftX() && noLeftY())
+      if (joystick.joy1_x2 > 20 && noLeftX() && noLeftY())
          move(abs(joystick.joy1_x2));
       //============ END RIGHT JOYSTICK ==============//
 
