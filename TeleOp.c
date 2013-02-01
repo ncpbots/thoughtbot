@@ -8,8 +8,8 @@
 #pragma config(Motor,  mtr_S1_C2_2,     lift2,         tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C3_1,     frontLeft,     tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C3_2,     rearLeft,      tmotorTetrix, openLoop)
-#pragma config(Motor,  mtr_S2_C1_1,     light1,        tmotorTetrix, openLoop)
-#pragma config(Motor,  mtr_S2_C1_2,     light2,        tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S2_C1_1,     light,         tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S2_C1_2,     motorA,        tmotorTetrix, openLoop)
 #pragma config(Servo,  srvo_S1_C4_1,    claw,                 tServoStandard)
 #pragma config(Servo,  srvo_S1_C4_2,    servo2,               tServoNone)
 #pragma config(Servo,  srvo_S1_C4_3,    servo3,               tServoNone)
@@ -153,11 +153,11 @@ task main()
       //============== RIGHT JOYSTICK ===============//
 
       //*** TURN LEFT ***//
-      if (joystick.joy1_x2 < -20 && noLeftX() && noLeftY())
+      if (joystick.joy1_x2 > 20 && noLeftX() && noLeftY())
          move(-abs(joystick.joy1_x2));
 
       //*** TURN RIGHT ***//
-      if (joystick.joy1_x2 > 20 && noLeftX() && noLeftY())
+      if (joystick.joy1_x2 < -20 && noLeftX() && noLeftY())
          move(abs(joystick.joy1_x2));
       //============ END RIGHT JOYSTICK ==============//
 
@@ -184,8 +184,8 @@ task main()
 
       //------------------------------ LIGHT CONTROL -------------------------------//
 
-      if (joy1Btn(2)==1) motor[light1] = 50; // Button 2: Lights on
-      if (joy1Btn(4)==1) motor[light1] = 0; // Button 4: Lights off
+      if (joy1Btn(2)==1) motor[light] = 50; // Button 2: Lights on
+      if (joy1Btn(4)==1) motor[light] = 0; // Button 4: Lights off
       //---------------------------- END LIGHT CONTROL -----------------------------//
    }
 }
