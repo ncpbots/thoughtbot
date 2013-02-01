@@ -113,22 +113,22 @@ task main()
 
       //*** FORWARD ***//
       if (joystick.joy1_y1 < -10 && noLeftX() && noRightX())
-         move(xAClock(), xAClock(),  xClock(), xClock());
+         move(yAClock(), yAClock(),  yClock(), yClock());
          //move(yAClock(), yClock(),  yAClock(), yClock());
 
       //*** REVERSE ***//
       if (joystick.joy1_y1 > 10 && noLeftX() && noRightX())
-         move(xClock(), xClock(),  xAClock(), xAClock());
+         move(yClock(), yClock(),  yAClock(), yAClock());
          //move(yClock(), yAClock(),  yClock(), yAClock());
 
       //*** STRAFE LEFT ***//
       if (joystick.joy1_x1 < -10 && noLeftY() && noRightX())
-         move(yClock(), yAClock(),  yClock(), yAClock());
+         move(xClock(), xAClock(),  xClock(), xAClock());
          //move(xAClock(), xAClock(),  xClock(), xClock());
 
       //*** STRAFE RIGHT ***//
       if (joystick.joy1_x1 > 10 && noLeftY() && noRightX())
-         move(yAClock(), yClock(),  yAClock(), yClock());
+         move(xAClock(), xClock(),  xAClock(), xClock());
          //move(xClock(), xClock(),  xAClock(), xAClock());
 
 
