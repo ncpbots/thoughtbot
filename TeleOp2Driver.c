@@ -168,9 +168,14 @@ task main()
 
       //------------------------------- LIFT CONTROL -------------------------------//
 
-      if (joystick.joy1_TopHat == 0) lift(80);                                   // Up
-      else if (joystick.joy1_TopHat == 4) lift(-70);                             // Down
-      else if (joystick.joy1_TopHat != 0 && joystick.joy1_TopHat != 4) lift(0);  // Stop
+      if (joystick.joy2_TopHat == 0) lift(80);                                   // Up JOY2
+      else if (joystick.joy2_TopHat == 4) lift(-70);                             // Down JOY2
+      else if (joystick.joy2_TopHat != 0 && joystick.joy2_TopHat != 4) //revert to JOY1 if no input on JOY2
+      {
+      	if (joystick.joy1_TopHat == 0) lift(80);                                   // Up JOY1
+      	else if (joystick.joy1_TopHat == 4) lift(-70);                             // Down JOY1
+      	else if (joystick.joy1_TopHat != 0 && joystick.joy1_TopHat != 4) lift(0);  // Stop JOY1
+      }
 
       //----------------------------- END LIFT CONTROL -----------------------------//
 
@@ -185,8 +190,8 @@ task main()
 
       //------------------------------ LIGHT CONTROL -------------------------------//
 
-      if (joy1Btn(2)==1) motor[light] = 50; // Button 2: Lights on
-      if (joy1Btn(4)==1) motor[light] = 0; // Button 4: Lights off
+      if (joy2Btn(2)==1) motor[light] = 50; // Button 2: Lights on JOY2
+      if (joy2Btn(4)==1) motor[light] = 0; // Button 4: Lights off JOY2
       //---------------------------- END LIGHT CONTROL -----------------------------//
    }
 }
