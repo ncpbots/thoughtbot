@@ -172,6 +172,8 @@ task main()
       else if (joystick.joy1_TopHat == 4) lift(-65);                             // Down
       else if (joystick.joy1_TopHat != 0 && joystick.joy1_TopHat != 4) lift(0);  // Stop
 
+    	//if (abs(joystick.joy2_y2)>15) lift(joystick.joy2_y2); // Up/Down with joystick 2 right analog Y
+
       //----------------------------- END LIFT CONTROL -----------------------------//
 
 
