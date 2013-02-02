@@ -168,8 +168,8 @@ task main()
 
       //------------------------------- LIFT CONTROL -------------------------------//
 
-      if (joystick.joy1_TopHat == 0) lift(60);                                   // Up
-      else if (joystick.joy1_TopHat == 4) lift(-60);                             // Down
+      if (joystick.joy1_TopHat == 0) lift(75);                                   // Up
+      else if (joystick.joy1_TopHat == 4) lift(-65);                             // Down
       else if (joystick.joy1_TopHat != 0 && joystick.joy1_TopHat != 4) lift(0);  // Stop
 
       //----------------------------- END LIFT CONTROL -----------------------------//
@@ -177,8 +177,8 @@ task main()
 
       //------------------------------- CLAW CONTROL--------------------------------//
 
-      if (joy1Btn(5)==1) servo[claw] = 140; //open on pressing 5
-      else if (joy1Btn(6)==1) servo[claw] = 220; //close on pressing 6
+      if (joy1Btn(5)==1) servo[claw] = 120; //open on pressing 5
+      else if (joy1Btn(6)==1) servo[claw] = 230; //close on pressing 6
       //----------------------------- END CLAW CONTROL -----------------------------//
 
 
